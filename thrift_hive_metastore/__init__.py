@@ -35,6 +35,9 @@ def main():
     # Connect!
     transport.open()
     for d in client.get_databases('*'):
-        print '[database: %s]' % d
+        print '[%s]' % d
         for t in client.get_tables(d, '*'):
-            print ' '*4,t
+            table = client.get_table(d, t)
+            print ' '*4, "{name}:    {location}".format(name=t, location=table.sd.location)
+            for c in table.sd.cols:
+                print ' '*8, c
