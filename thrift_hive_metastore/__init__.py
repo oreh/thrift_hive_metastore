@@ -34,8 +34,7 @@ def main():
 
     # Connect!
     transport.open()
-    print '[tables]'
-    for t in client.get_tables('default', '*'):
-        print t
-
-
+    for d in client.get_databases('*'):
+        print '[database: %s]' % d
+        for t in client.get_tables(d, '*'):
+            print ' '*4,t
