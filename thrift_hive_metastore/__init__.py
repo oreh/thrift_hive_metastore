@@ -3,9 +3,17 @@ __all__ = ['ttypes', 'constants', 'ThriftHiveMetastore']
 def main():
     import sys
 
-    if len(sys.argv) == 3:
+    if len(sys.argv) >= 3:
         host = sys.argv[1]
         port = sys.argv[2]
+        if len(sys.argv) >= 4:
+            database_pattern = sys.argv[3]
+        else:
+            database_pattern = '*'
+        if len(sys.argv) >= 5:
+            table_pattern = sys.argv[4]
+        else:
+            table_pattern = '*'
     else:
         host = 'localhost'
         port = 9083
@@ -34,9 +42,9 @@ def main():
 
     # Connect!
     transport.open()
-    for d in client.get_databases('*'):
+    for d in client.get_databases(database_pattern):
         print '[%s]' % d
-        for t in client.get_tables(d, '*'):
+        for t in client.get_tables(d, table_pattern):
             table = client.get_table(d, t)
             print ' '*4, "{name}:    {location}".format(name=t, location=table.sd.location)
             for c in table.sd.cols:
