@@ -9,5 +9,8 @@ project just makes a nice package of the generated code.
 
 Usage
 =====
-
+```bash
+>> tox -r -e py27
+>> .tox/py27/bin/python setup.py sdist upload
+```
 
