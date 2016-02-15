@@ -29,7 +29,7 @@ setup(
     long_description=long_description,
 
     # The project's main homepage.
-    url='https://github.com/',
+    url='https://github.com/oreh/thrift_hive_metastore',
 
     # Author details
     author='Oreh',

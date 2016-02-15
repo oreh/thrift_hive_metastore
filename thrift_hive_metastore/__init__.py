@@ -1,17 +1,24 @@
 __all__ = ['ttypes', 'constants', 'ThriftHiveMetastore']
 
 def main():
-    import sys
+    from optparse import OptionParser
 
-    if len(sys.argv) >= 3:
-        host = sys.argv[1]
-        port = sys.argv[2]
-        if len(sys.argv) >= 4:
-            database_pattern = sys.argv[3]
+    parser = OptionParser()
+    parser.add_option("-s", "--show-fields", dest="show_fields",
+                  help="show fields of table", action="store_true", default=False)
+    (options, args) = parser.parse_args()
+    print options
+    print args
+
+    if len(args) >= 2:
+        host = args[0]
+        port = args[1]
+        if len(args) >= 3:
+            database_pattern = args[2]
         else:
             database_pattern = '*'
-        if len(sys.argv) >= 5:
-            table_pattern = sys.argv[4]
+        if len(args) >= 4:
+            table_pattern = args[3]
         else:
             table_pattern = '*'
     else:
@@ -19,6 +26,8 @@ def main():
         port = 9083
     print 'host: ', host
     print 'port: ', port
+    print 'database_pattern: ', database_pattern
+    print 'table_pattern: ', table_pattern
 
     from thrift_hive_metastore import ThriftHiveMetastore
     from thrift_hive_metastore.ttypes import *
@@ -46,6 +55,7 @@ def main():
         print '[%s]' % d
         for t in client.get_tables(d, table_pattern):
             table = client.get_table(d, t)
-            print ' '*4, "{name}:    {location}".format(name=t, location=table.sd.location)
-            for c in table.sd.cols:
-                print ' '*8, c
+            print ' '*4, "{namespace}.{name}:    {location}".format(namespace=d, name=t, location=table.sd.location)
+            if options.show_fields:
+                for c in table.sd.cols:
+                    print ' '*8, c
